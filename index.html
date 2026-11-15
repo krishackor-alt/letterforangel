@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,7 +31,7 @@
       backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 143, 163, 0.25);
       border-radius: 24px;
-      padding: 28px 22px;
+      padding: 26px 20px;
       text-align: center;
       box-shadow: 0 20px 50px rgba(0,0,0,0.6);
       position: relative;
@@ -38,8 +39,8 @@
     .stage { display: none; animation: fadeIn 0.5s ease forwards; }
     .stage.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-    h1, h2 { color: #ffb3c1; margin-bottom: 12px; }
-    p { font-size: 0.95rem; line-height: 1.5; color: #ffe5ec; margin-bottom: 18px; }
+    h1, h2 { color: #ffb3c1; margin-bottom: 10px; }
+    p { font-size: 0.95rem; line-height: 1.5; color: #ffe5ec; margin-bottom: 16px; }
     
     /* Stage 1: Keypad */
     .pin-dots { display: flex; justify-content: center; gap: 14px; margin: 20px 0; }
@@ -66,14 +67,27 @@
       background: linear-gradient(135deg, #ff4d6d, #c9184a);
       color: white;
       border: none;
-      padding: 13px 22px;
+      padding: 13px 20px;
       border-radius: 14px;
-      font-size: 1rem;
+      font-size: 0.98rem;
       font-weight: 600;
       cursor: pointer;
       width: 100%;
       margin-top: 10px;
       box-shadow: 0 6px 20px rgba(255, 77, 109, 0.35);
+      transition: transform 0.15s, opacity 0.2s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 179, 193, 0.35);
+      color: #ffe5ec;
+      box-shadow: none;
+      padding: 9px 14px;
+      font-size: 0.84rem;
+      border-radius: 10px;
+      width: auto;
+      margin-top: 0;
     }
     .quiz-option {
       background: rgba(255,255,255,0.09);
@@ -90,22 +104,31 @@
     .quiz-option:active { background: var(--primary); }
     .toast { min-height: 24px; color: #ffccd5; font-size: 0.9rem; margin-top: 8px; font-weight: 500; }
     
-    /* Stage 3 & 4 & 5 */
+    /* Stage 3, 4 & 5 */
     .runaway-wrap { position: relative; height: 150px; margin-top: 20px; }
     #noBtn { position: absolute; width: auto; padding: 10px 22px; background: rgba(255,255,255,0.15); left: 35%; top: 70px; transition: 0.15s ease; }
     .big-thanks { font-size: 2.3rem; font-weight: 800; color: #ff4d6d; text-shadow: 0 0 20px rgba(255,77,109,0.7); margin: 16px 0; animation: pulse 1.5s infinite; }
     @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+    
     .scanner-btn {
       width: 115px; height: 115px; border-radius: 50%;
       background: radial-gradient(circle, #ff4d6d, #590d22);
-      margin: 20px auto; display: flex; align-items: center; justify-content: center;
+      margin: 16px auto; display: flex; align-items: center; justify-content: center;
       font-size: 2.8rem; cursor: pointer; user-select: none;
       box-shadow: 0 0 25px rgba(255,77,109,0.6);
       transition: transform 0.2s;
     }
     .scanner-btn:active { transform: scale(1.12); }
+    .sync-bar-bg {
+      width: 80%; height: 10px; background: rgba(255,255,255,0.12);
+      border-radius: 10px; margin: 12px auto; overflow: hidden;
+    }
+    .sync-bar-fill {
+      width: 0%; height: 100%; background: linear-gradient(90deg, #ff8fa3, #ff4d6d);
+      transition: width 0.1s linear;
+    }
 
-    /* Stage 6: Envelope & Letter */
+    /* Stage 6: Envelope & Interactive Story Letter */
     .envelope-wrap {
       margin: 25px auto;
       cursor: pointer;
@@ -129,43 +152,82 @@
       border: 2px solid #ff4d6d;
     }
     .letter-container { display: none; }
+    .letter-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .chapter-badge {
+      background: rgba(255, 77, 109, 0.25);
+      border: 1px solid rgba(255, 143, 163, 0.4);
+      color: #ffb3c1;
+      padding: 4px 11px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .story-dots {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 12px;
+    }
+    .story-dot {
+      flex: 1;
+      height: 4px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.18);
+      transition: background 0.3s;
+    }
+    .story-dot.active {
+      background: var(--primary);
+      box-shadow: 0 0 8px var(--primary);
+    }
     .letter-box {
       background: #fff8f9;
       color: #2b0912;
       padding: 22px 18px;
       border-radius: 16px;
       text-align: left;
-      max-height: 58vh;
+      height: 54vh;
       overflow-y: auto;
       white-space: pre-wrap;
-      font-size: 0.95rem;
-      line-height: 1.68;
+      font-size: 0.96rem;
+      line-height: 1.72;
       box-shadow: inset 0 0 15px rgba(0,0,0,0.08);
       border: 2px solid #ffccd5;
-    }
-    .scratch-wrap {
-      margin-top: 18px;
+      scroll-behavior: smooth;
       position: relative;
-      width: 100%;
-      height: 110px;
-      border-radius: 14px;
-      overflow: hidden;
-      background: linear-gradient(135deg, #fff0f3, #ffccd5);
-      color: #800f2f;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 12px;
+    }
+    .chapter-title {
+      color: #c9184a;
       font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      display: block;
+      border-bottom: 1px dashed #ffb3c1;
+      padding-bottom: 6px;
     }
-    #scratchCanvas {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      cursor: pointer;
-      touch-action: none;
+    .letter-nav {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
     }
+    .letter-nav .btn {
+      margin-top: 0;
+    }
+    .btn-prev {
+      width: 35%;
+      background: rgba(255, 255, 255, 0.14);
+      box-shadow: none;
+    }
+    .typing-cursor::after {
+      content: "▋";
+      color: #c9184a;
+      animation: blink 0.8s infinite;
+      margin-left: 2px;
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
   </style>
 </head>
 <body>
@@ -191,7 +253,7 @@
       <div class="key" onclick="pressKey('7')">7</div>
       <div class="key" onclick="pressKey('8')">8</div>
       <div class="key" onclick="pressKey('9')">9</div>
-      <div class="key" onclick="showHint()" style="font-size:0.85rem;">Hint 💡</div>
+      <div class="key" onclick="showHint()" style="font-size:0.85rem;">Need a hint?</div>
       <div class="key" onclick="pressKey('0')">0</div>
       <div class="key" onclick="clearPin()" style="font-size:0.9rem;">⌫</div>
     </div>
@@ -200,7 +262,7 @@
 
   <!-- STAGE 2: QUIZ -->
   <div id="stage2" class="stage">
-    <h2 id="quizTitle">Question 1 of 4</h2>
+    <h2 id="quizTitle">Question 1</h2>
     <p id="quizQuestion"></p>
     <div id="quizOptions"></div>
     <div class="toast" id="quizToast"></div>
@@ -208,8 +270,8 @@
 
   <!-- STAGE 3: RUNAWAY NO -->
   <div id="stage3" class="stage">
-    <h2>One Final Question... 💕</h2>
-    <p>Are you ready to handle me, my craziness, and my nak-ko-tuppo ko ris forever, Angel?</p>
+    <h2>One Last Question... 💕</h2>
+    <p>Do you love me the most and will you stay with me forever?</p>
     <div class="runaway-wrap">
       <button class="btn" onclick="goStage(4)">YES, ALWAYS! ❤️</button>
       <button class="btn" id="noBtn" onmouseover="moveNo()" ontouchstart="moveNo()">No 🙄</button>
@@ -219,24 +281,27 @@
   <!-- STAGE 4: GIANT THANK YOU -->
   <div id="stage4" class="stage">
     <div class="big-thanks">THANK YOU ❤️</div>
-    <h2>For Everything since July 4</h2>
-    <p>Before you read this letter, I just want to say a massive THANK YOU for being my peace, my safe place, and my Angel across every mile.</p>
-    <button class="btn" onclick="goStage(5)">Continue to Scanner 💓</button>
+    <h2>For Coming Into My Life</h2>
+    <p>Since July 4, you have been my favorite notification, my safe place, and my greatest blessing. Thank you for being mine, Angel.</p>
+    <button class="btn" onclick="goStage(5)">Tap to Open Your Letter 💌</button>
   </div>
 
   <!-- STAGE 5: HEARTBEAT SCANNER -->
   <div id="stage5" class="stage">
-    <h2>Sync Our Hearts</h2>
-    <p>Press and hold your thumb on the heart for 2 seconds to unlock the envelope, Sanu.</p>
+    <h2>Heartbeat Scanner 💓</h2>
+    <p>Press and hold your thumb on the heart for 3 seconds to sync our hearts.</p>
     <div class="scanner-btn" onmousedown="startHold()" onmouseup="endHold()" ontouchstart="startHold()" ontouchend="endHold()">❤️</div>
-    <div class="toast" id="holdToast">Hold thumb on heart...</div>
+    <div class="sync-bar-bg">
+      <div class="sync-bar-fill" id="syncBar"></div>
+    </div>
+    <div class="toast" id="holdToast">Waiting for your touch...</div>
   </div>
 
-  <!-- STAGE 6: ENVELOPE, LETTER & SCRATCH CARD -->
+  <!-- STAGE 6: ENVELOPE & INTERACTIVE STORY LETTER -->
   <div id="stage6" class="stage">
     <div id="envelopePrompt">
       <h2>A Letter For My Angel 💌</h2>
-      <p>Tap the wax seal to break it open...</p>
+      <p>Tap the wax-sealed envelope to unfold your letter...</p>
       <div class="envelope-wrap" onclick="openEnvelope()">
         <div class="envelope">
           <div class="wax-seal">❤️</div>
@@ -245,13 +310,21 @@
     </div>
 
     <div id="letterContainer" class="letter-container">
-      <h2>💌 Dear Angel</h2>
-      <div class="letter-box" id="letterContent"></div>
-      
-      <div class="scratch-wrap">
-        <div style="font-size:0.85rem; color:#c9184a;">🎟️ SECRET BONUS COUPON</div>
-        <div style="font-size:0.95rem; margin-top:4px;">1x Unlimited Panipuri Date + Tightest Hug & Full Night Cuddle Session (No Escape!) 🔥❤️</div>
-        <canvas id="scratchCanvas"></canvas>
+      <div class="letter-header-bar">
+        <span class="chapter-badge" id="chapterBadge">Page 1 of 7</span>
+        <button class="btn btn-secondary" id="toggleModeBtn" onclick="toggleReadMode()">📜 Read Full Scroll</button>
+      </div>
+
+      <div class="story-dots" id="storyDots"></div>
+
+      <div class="letter-box" id="letterBox" onclick="finishCurrentPageInstantly()">
+        <span class="chapter-title" id="chapterTitle"></span>
+        <span id="letterContent" class="typing-cursor"></span>
+      </div>
+
+      <div class="letter-nav" id="letterNav">
+        <button class="btn btn-prev" id="prevBtn" onclick="changePage(-1)">⬅ Back</button>
+        <button class="btn" id="nextBtn" onclick="changePage(1)">Next Page ❤️ ➡</button>
       </div>
     </div>
   </div>
@@ -289,41 +362,73 @@
   }
 
   function showHint() {
-    document.getElementById("pinToast").innerText = "Hint: Hami Bolna suru gareko din 💕 (0704)";
+    document.getElementById("pinToast").innerText = "Hami Bolna suru gareko din 💕";
   }
 
   const quizzes = [
     {
-      q: "Where did we have those unforgettable panipuri dates where we laughed, talked, and took photos?",
-      options: ["Kaushaltar 🥟", "New Road", "Patan Durbar Square"],
+      q: "What makes July 4 so special for us?",
+      options: [
+        "Just another random summer day",
+        "Hami bolna suru gareko din 💕",
+        "World Ice Cream Day"
+      ],
+      answer: 1,
+      wrongMsg: "Aiyoo Testo birsine hora! Try again 😜"
+    },
+    {
+      q: "Which of the following is the real poem title written by me?",
+      options: [
+        "Dear Angel ❤️",
+        "Angel",
+        "Priye Angel",
+        "My Angel"
+      ],
       answer: 0,
-      wrongMsg: "Ohooo birseu? Think about our favorite panipuri spot! 😜"
+      wrongMsg: "Think carefully! What do I call you at the start of my letter? 🥰"
     },
     {
-      q: "According to Sabitri Thulmami, where does the Acharya khandan ko ris sit?",
-      options: ["In the stomach", "Right on the tip of the nose (Naak ko tuppo ma) 😤", "Nowhere, I am always calm"],
-      answer: 1,
-      wrongMsg: "Haha nice try, you know how fast my temper flares! 😂"
-    },
-    {
-      q: "If I was right there in Nepal in your room right now, what would happen first?",
+      q: "What's my favourite snack time with you?",
       options: [
-        "We would quietly study together 📚",
-        "You'd hug me and cry, I'd pretend to be mad & tell you not to cry, then cuddle you until things get naughty 😏🔥",
-        "We would just go to sleep immediately"
+        "Sausage and momo at Baneswor",
+        "Panipuri at Kaushaltar",
+        "Tmro room ma tmle banako khana",
+        "All of the above ❤️"
       ],
-      answer: 1,
-      wrongMsg: "As if I'd just study or sleep if I was in your room right now! 😏"
+      answer: 3,
+      wrongMsg: "Every single one with you is my favorite! Pick 'All of the above' 😋"
     },
     {
-      q: "Once we get into bed together, how long am I keeping you awake doing naughty things to you? 😈🔥",
+      q: "If I was there right now, what would I do? 😏🔥",
       options: [
-        "Just 5 minutes",
-        "Hours and hours (ghantau samma) without letting you go 🔥😜",
-        "Not at all, I'm a saint"
+        "Cuddle matra garthe",
+        "Finger garthe",
+        "Chikthe",
+        "Sabai garthe 😈🔥"
       ],
-      answer: 1,
-      wrongMsg: "Saint re?! You know me way better than that, Sanu! 😝"
+      answer: 3,
+      wrongMsg: "Euta matra garera pugxa ta?! Sabai garthe नि! 😝🔥"
+    },
+    {
+      q: "And if I was there, kati round gartheu tmi? 😈",
+      options: [
+        "2",
+        "3",
+        "Unlimited 🔥♾️"
+      ],
+      answer: 2,
+      wrongMsg: "Teti thorai le ka pugxa hau! Unlimited ho ni 😜🔥"
+    },
+    {
+      q: "How much do I love you?",
+      options: [
+        "1 kilo",
+        "10 muri",
+        "Dherai",
+        "Sabai vanda dherai ❤️♾️"
+      ],
+      answer: 3,
+      wrongMsg: "More than that! Sabai vanda dherai! 💕"
     }
   ];
 
@@ -359,16 +464,28 @@
     btn.style.transform = `translate(${x}px, ${y}px)`;
   }
 
-  let holdTimer;
+  let holdInterval;
+  let progress = 0;
   function startHold() {
-    document.getElementById("holdToast").innerText = "Syncing heartbeats... 💓 (Keep holding!)";
-    holdTimer = setTimeout(() => {
-      goStage(6);
-    }, 1800);
+    clearInterval(holdInterval);
+    holdInterval = setInterval(() => {
+      progress += 4;
+      if (progress > 100) progress = 100;
+      document.getElementById("syncBar").style.width = progress + "%";
+      document.getElementById("holdToast").innerText = `Syncing our hearts... ${progress}% 💓`;
+      if (progress >= 100) {
+        clearInterval(holdInterval);
+        goStage(6);
+      }
+    }, 100);
   }
   function endHold() {
-    clearTimeout(holdTimer);
-    document.getElementById("holdToast").innerText = "Hold a little longer, Angel! 💕";
+    if (progress < 100) {
+      clearInterval(holdInterval);
+      progress = 0;
+      document.getElementById("syncBar").style.width = "0%";
+      document.getElementById("holdToast").innerText = "Keep holding for 3 seconds to reach 100%! 💕";
+    }
   }
 
   function goStage(n) {
@@ -376,95 +493,28 @@
     document.getElementById("stage" + n).classList.add("active");
   }
 
-  const fullLetter = `My Dearest Angel ❤️,
-
-From that very first day we started talking on July 4 ("Hami bolna suru gareko din") to right now, every single memory with you means the world to me. Sending a normal text felt too old-school for someone this special, so I built this little space just for you.
-
-Soo, dherai vayo hai letter nalekheko.. feri lekhna man lageko panina dherai vaisako time nai thiyena ta navanam aaja jagar chalyo so aaja lekhdai xu.. First of all thank you thank you sooo much for staying & being with me, malai jhelna ko lagi bisesh dhanyavaad.
-
-Ohoo, dherai paxi letter lekhexa kina lekhya jasto lagyo hola, tmlai dhanyavaad gyapan garna lekheko haai 🤣 hunxani hami ek arka sanga dherai kurako lagi thankful holam tara vandainam tara aaja ma saab vanna gairaheko xu yaad aako jati hai feri, sabai yaad ka hunxara haina 🤣
-
-Sooo, firstly long distance vayesi thaha vayo k hamile paila spend gareko time kati chai precious thiyo, I was meant to enjoy every bit of it tara ma aali pagal thiye aali hattarine manxe, sano kurama resaune manxe... (Yesko main context chai ma ekdin tmro room raat basne gari aako thiyeni aani hami mandir ma basya them bench ma tyo din bata bishesh aako hai, aani Jadibuti bata hiddai gako din bata pani) I wanna apologise, I'm so so so sorry la....
-
-Aani second ma sano kurama dherai resaye jastoni lagxa tyo bela ris valid thyo jasto lagthyo tara risko validity vanne chij chai hudaina hai hamile ta sakesamma ek arka lai bujne honi sano sano kurama resaune haina ni hai tarani ris kada mero resauthe ma (Santosh thulba ko budi Sabitri thulmami le vannu hunthyo k yo Acharya khandan ko ris chai naak ko tuppo mai hune hai vanera). Main yaad chai kun din ko aauxa vane ekdin ma tmro room ma aauda gharbeti le hoki kasle dekheko thiyo aani tmi aali risako type thiyeu malai jau vaneu tara ma jhan resaye risma gaye dherai resaye tesko lagini maafi magxu huss... So Sorry Sanu.
-
-Aani aaru ni thuprai holan tara aaile laichai yettinai yaad aayo baki aaru kura yaad aauxa gayo vane arko patrama avasya lekhne xu huss..
-
-Kaushaltar ma panipuri khadako bisesh yaad aauxa feri that's the moment I used to enjoy the most, that's something great man maja aauthyo khayo, guff layo, hasyo, photo khichyo.
-
-Aani aaunu aagi khasai time spend garna paiyena ma dherainai busy vayera last din pani ekdam hattar hattar vayo Dipesh dailai bahana banayera dhanna vetna chai aaye yeti mehenat gareko thiyeuni tmle.. I'm so so so thankful for that maan dherainai mehenat ra plan gareko thiyeu but samaye le aali sath diyena tesaile hatar hatar vayo.. so sorry la..
-
-Aani aaruta khasai kei yaad aairaxaina aaile lai aaja ma Nepal mai vaideko vaye sayed tmroma aauthe hola haai.. malai angalesi ekxin runtheu hola ma resauthe hola narou vanera samjhauthe hola and I would have cuddled you aani tmi nidautheu hola... Aaru ni dherai thok hunthyo hola 😜😝
-
-Ali bistar ma janxu haita yesma chai lekhi sab lekhi sakya thiye tara yesma feri bistar ma jana man lagyo malai... Vai hunthiyo hola sayed pallo khatma tara jasari ni manage garinai halthem hami i would have finger you suck your boobs and finger chai ghantau samma garthe hola hau maile... aani milayera i would have put my dick inside your pussy, kati nyano tato hunxa yrr... Aani garna ta possible hudaina thyo tyai vitrai rakhi rakhthe..
-
-Last ma thank you for everything, dherai dherai nai thankful xu man batanai dhanyavaad gyapan garna chahe maile....
-Thank you for being with me.
-Thank you for being with me j sukai vaye pani.
-Special thanks for not giving up on me.
-
-No matter the distance right now, you are always right here with me in every thought and every heartbeat.
-
-I love you sooo soo much Sanu and I miss you soo sooo soo much 😚😚🤗🤗🫶❤️
-
-Forever Yours,
-Krish ❤️`;
-
-  function openEnvelope() {
-    document.getElementById("envelopePrompt").style.display = "none";
-    document.getElementById("letterContainer").style.display = "block";
-    initScratchCard();
-    typeWriter(fullLetter, 0);
-  }
-
-  function typeWriter(text, i) {
-    const box = document.getElementById("letterContent");
-    if (i < text.length) {
-      box.textContent += text.charAt(i);
-      box.scrollTop = box.scrollHeight;
-      setTimeout(() => typeWriter(text, i + 1), 12);
-    }
-  }
-
-  function initScratchCard() {
-    const canvas = document.getElementById("scratchCanvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-
-    ctx.fillStyle = "#b5b5b5";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#333";
-    ctx.font = "bold 14px sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText("✨ Rub Finger Here to Scratch ✨", canvas.width / 2, canvas.height / 2 + 5);
-
-    let drawing = false;
-    function scratch(x, y) {
-      ctx.globalCompositeOperation = "destination-out";
-      ctx.beginPath();
-      ctx.arc(x, y, 22, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    canvas.addEventListener("mousedown", () => drawing = true);
-    canvas.addEventListener("mouseup", () => drawing = false);
-    canvas.addEventListener("mousemove", (e) => {
-      if (!drawing) return;
-      const rect = canvas.getBoundingClientRect();
-      scratch(e.clientX - rect.left, e.clientY - rect.top);
-    });
-
-    canvas.addEventListener("touchstart", (e) => { drawing = true; e.preventDefault(); });
-    canvas.addEventListener("touchend", () => drawing = false);
-    canvas.addEventListener("touchmove", (e) => {
-      if (!drawing) return;
-      e.preventDefault();
-      const rect = canvas.getBoundingClientRect();
-      const touch = e.touches[0];
-      scratch(touch.clientX - rect.left, touch.clientY - rect.top);
-    });
-  }
-</script>
-</body>
-</html>
+  // Interactive Story Pages so she never loses scroll position!
+  const letterPages = [
+    {
+      title: "💌 My Dearest Angel ❤️",
+      text: `From that very first day we started talking on July 4 ("Hami bolna suru gareko din") to right now, every single memory with you means the world to me. Sending a normal text felt too old-school for someone this special, so I built this little space just for you.\n\nSoo, dherai vayo hai letter nalekheko.. feri lekhna man lageko panina dherai vaisako time nai thiyena ta navanam aaja jagar chalyo so aaja lekhdai xu.. First of all thank you thank you sooo much for staying & being with me, malai jhelna ko lagi bisesh dhanyavaad.`
+    },
+    {
+      title: "✨ Dhanyavaad Gyapan 🤣❤️",
+      text: `Ohoo, dherai paxi letter lekhexa kina lekhya jasto lagyo hola, tmlai dhanyavaad gyapan garna lekheko haai 🤣 hunxani hami ek arka sanga dherai kurako lagi thankful holam tara vandainam tara aaja ma saab vanna gairaheko xu yaad aako jati hai feri, sabai yaad ka hunxara haina 🤣\n\nSooo, firstly long distance vayesi thaha vayo k hamile paila spend gareko time kati chai precious thiyo, I was meant to enjoy every bit of it tara ma aali pagal thiye aali hattarine manxe, sano kurama resaune manxe... (Yesko main context chai ma ekdin tmro room raat basne gari aako thiyeni aani hami mandir ma basya them bench ma tyo din bata bishesh aako hai, aani Jadibuti bata hiddai gako din bata pani) I wanna apologise, I'm so so so sorry la....`
+    },
+    {
+      title: "🥺 Mero Ris & Sorry Sanu",
+      text: `Aani second ma sano kurama dherai resaye jastoni lagxa tyo bela ris valid thyo jasto lagthyo tara risko validity vanne chij chai hudaina hai hamile ta sakesamma ek arka lai bujne honi sano sano kurama resaune haina ni hai tarani ris kada mero resauthe ma (Santosh thulba ko budi Sabitri thulmami le vannu hunthyo k yo Acharya khandan ko ris chai naak ko tuppo mai hune hai vanera).\n\nMain yaad chai kun din ko aauxa vane ekdin ma tmro room ma aauda gharbeti le hoki kasle dekheko thiyo aani tmi aali risako type thiyeu malai jau vaneu tara ma jhan resaye risma gaye dherai resaye tesko lagini maafi magxu huss... So Sorry Sanu.\n\nAani aaru ni thuprai holan tara aaile laichai yettinai yaad aayo baki aaru kura yaad aauxa gayo vane arko patrama avasya lekhne xu huss..`
+    },
+    {
+      title: "🥟 Kaushaltar Panipuri & Last Day",
+      text: `Kaushaltar ma panipuri khadako bisesh yaad aauxa feri that's the moment I used to enjoy the most, that's something great man maja aauthyo khayo, guff layo, hasyo, photo khichyo.\n\nAani aaunu aagi khasai time spend garna paiyena ma dherainai busy vayera last din pani ekdam hattar hattar vayo Dipesh dailai bahana banayera dhanna vetna chai aaye yeti mehenat gareko thiyeuni tmle.. I'm so so so thankful for that maan dherainai mehenat ra plan gareko thiyeu but samaye le aali sath diyena tesaile hatar hatar vayo.. so sorry la..`
+    },
+    {
+      title: "🔥 If I Was In Nepal Tonight... 😜",
+      text: `Aani aaruta khasai kei yaad aairaxaina aaile lai aaja ma Nepal mai vaideko vaye sayed tmroma aauthe hola haai.. malai angalesi ekxin runtheu hola ma resauthe hola narou vanera samjhauthe hola and I would have cuddled you aani tmi nidautheu hola... Aaru ni dherai thok hunthyo hola 😜😝\n\nAli bistar ma janxu haita yesma chai lekhi sab lekhi sakya thiye tara yesma feri bistar ma jana man lagyo malai... Vai hunthiyo hola sayed pallo khatma tara jasari ni manage garinai halthem hami i would have finger you suck your boobs and finger chai ghantau samma garthe hola hau maile... aani milayera i would have put my dick inside your pussy, kati nyano tato hunxa yrr... Aani garna ta possible hudaina thyo tyai vitrai rakhi rakhthe..`
+    },
+    {
+      title: "♾️ Forever Yours, Angel ❤️",
+      text: `Last ma thank you for everything, dherai dherai nai thankful xu man batanai dhanyavaad gyapan garna chahe maile....\nThank you for being with me.\nThank you for being with me j sukai vaye pani.\nSpecial thanks for not giving up on me.\n\nNo matter the distance right now, you are always right here with me in every thought and every heartbeat.\n\
