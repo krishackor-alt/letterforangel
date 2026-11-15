@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>For My Angel ❤️</title>
+  <style>
+    :root {
+      --primary: #ff4d6d;
+      --secondary: #ff8fa3;
+      --bg-dark: #1a0b12;
+      --card-bg: rgba(255, 255, 255, 0.08);
+      --text: #fff0f3;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body {
+      background: radial-gradient(circle at top, #3b0d1e, #12050a);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      padding: 16px;
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 143, 163, 0.25);
+      border-radius: 24px;
+      padding: 28px 22px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      position: relative;
+    }
+    .stage { display: none; animation: fadeIn 0.5s ease forwards; }
+    .stage.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    h1, h2 { color: #ffb3c1; margin-bottom: 12px; }
+    p { font-size: 0.95rem; line-height: 1.5; color: #ffe5ec; margin-bottom: 18px; }
+    .pin-dots { display: flex; justify-content: center; gap: 14px; margin: 20px 0; }
+    .dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--secondary); transition: 0.2s; }
+    .dot.filled { background: var(--primary); border-color: var(--primary); box-shadow: 0 0 10px var(--primary); }
+    .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 260px; margin: 0 auto; }
+    .key {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: white;
+      font-size: 1.3rem;
+      padding: 14px;
+      border-radius: 50%;
+      cursor: pointer;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .key:active { background: var(--primary); transform: scale(0.94); }
+    .btn {
+      background: linear-gradient(135deg, #ff4d6d, #c9184a);
+      color: white;
+      border: none;
+      padding: 13px 22px;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      box-shadow: 0 6px 20px rgba(255, 77, 109, 0.35);
+    }
+    .quiz-option {
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(255,179,193,0.3);
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      text-align: left;
+      font-size: 0.95rem;
+      transition: 0.2s;
+    }
+    .quiz-option:active { background: var(--primary); }
+    .toast { min-height: 24px; color: #ffccd5; font-size: 0.9rem; margin-top: 8px; font-weight: 500; }
+    .runaway-wrap { position: relative; height: 140px; margin-top: 20px; }
+    #noBtn { position: absolute; width: auto; padding: 10px 22px; background: rgba(255,255,255,0.15); }
+    .big-thanks { font-size: 2.3rem; font-weight: 800; color: #ff4d6d; text-shadow: 0 0 20px rgba(255,77,109,0.7); margin: 16px 0; }
+    .scanner-btn {
+      width: 110px; height: 110px; border-radius: 50%;
+      background: radial-gradient(circle, #ff4d6d, #590d22);
+      margin: 20px auto; display: flex; align-items: center; justify-content: center;
+      font-size: 2.8rem; cursor: pointer; user-select: none;
+      box-shadow: 0 0 25px rgba(255,77,109,0.6);
+      transition: transform 0.2s;
+    }
+    .scanner-btn:active { transform: scale(1.1); }
+    .letter-box {
+      background: #fff8f9;
+      color: #2b0912;
+      padding: 22px 18px;
+      border-radius: 16px;
+      text-align: left;
+      max-height: 62vh;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      font-size: 0.96rem;
+      line-height: 1.65;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.08);
+    }
+    .letter-box h3 { color: #c9184a; margin-bottom: 12px; font-size: 1.25rem; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <!-- STAGE 1: PASSCODE -->
+  <div id="stage1" class="stage active">
+    <h2>🔒 Secret Lock</h2>
+    <p>Enter our 4-digit passcode to unlock your surprise, Angel.</p>
+    <div class="pin-dots">
+      <div class="dot" id="dot0"></div>
+      <div class="dot" id="dot1"></div>
+      <div class="dot" id="dot2"></div>
+      <div class="dot" id="dot3"></div>
+    </div>
+    <div class="keypad">
+      <div class="key" onclick="pressKey('1')">1</div>
+      <div class="key" onclick="pressKey('2')">2</div>
+      <div class="key" onclick="pressKey('3')">3</div>
+      <div class="key" onclick="pressKey('4')">4</div>
+      <div class="key" onclick="pressKey('5')">5</div>
+      <div class="key" onclick="pressKey('6')">6</div>
+      <div class="key" onclick="pressKey('7')">7</div>
+      <div class="key" onclick="pressKey('8')">8</div>
+      <div class="key" onclick="pressKey('9')">9</div>
+      <div class="key" onclick="showHint()" style="font-size:0.85rem;">Hint 💡</div>
+      <div class="key" onclick="pressKey('0')">0</div>
+      <div class="key" onclick="clearPin()" style="font-size:0.9rem;">⌫</div>
+    </div>
+    <div class="toast" id="pinToast"></div>
+  </div>
+
+  <!-- STAGE 2: QUIZ -->
+  <div id="stage2" class="stage">
+    <h2 id="quizTitle">Question 1 of 4</h2>
+    <p id="quizQuestion"></p>
+    <div id="quizOptions"></div>
+    <div class="toast" id="quizToast"></div>
+  </div>
+
+  <!-- STAGE 3: RUNAWAY NO -->
+  <div id="stage3" class="stage">
+    <h2>One Last Question... 💕</h2>
+    <p>Are you ready to handle me and my nak-ko-tuppo ko ris forever, Angel?</p>
+    <div class="runaway-wrap">
+      <button class="btn" onclick="goStage(4)" style="margin-bottom:14px;">YES, ALWAYS! ❤️</button>
+      <button class="btn" id="noBtn" onmouseover="moveNo()" ontouchstart="moveNo()">No 🙄</button>
+    </div>
+  </div>
+
+  <!-- STAGE 4: GIANT THANK YOU -->
+  <div id="stage4" class="stage">
+    <div class="big-thanks">THANK YOU ❤️</div>
+    <h2>For Being My Angel</h2>
+    <p>Thank you for staying with me through long distance, my crazy mood swings, and everything in between.</p>
+    <button class="btn" onclick="goStage(5)">Unlock My Letter 💌</button>
+  </div>
+
+  <!-- STAGE 5: HEARTBEAT SCANNER -->
+  <div id="stage5" class="stage">
+    <h2>Sync Our Hearts</h2>
+    <p>Press and hold the heart for 2 seconds to open your letter, Sanu.</p>
+    <div class="scanner-btn" onmousedown="startHold()" onmouseup="endHold()" ontouchstart="startHold()" ontouchend="endHold()">❤️</div>
+    <div class="toast" id="holdToast">Hold thumb on heart...</div>
+  </div>
+
+  <!-- STAGE 6: LETTER -->
+  <div id="stage6" class="stage">
+    <h2>💌 For My Angel</h2>
+    <div class="letter-box" id="letterContent"></div>
+  </div>
+</div>
+
+<script>
+  let pin = "";
+  const correctPin = "0704";
+
+  function pressKey(num) {
+    if (pin.length < 4) {
+      pin += num;
+      updateDots();
+      if (pin.length === 4) {
+        if (pin === correctPin) {
+          goStage(2);
+          loadQuiz();
+        } else {
+          document.getElementById("pinToast").innerText = "Wrong code Sanu! Try again 😜";
+          setTimeout(clearPin, 700);
+        }
+      }
+    }
+  }
+
+  function updateDots() {
+    for (let i = 0; i < 4; i++) {
+      document.getElementById("dot" + i).classList.toggle("filled", i < pin.length);
+    }
+  }
+
+  function clearPin() {
+    pin = "";
+    updateDots();
+  }
+
+  function showHint() {
+    document.getElementById("pinToast").innerText = "Hint: Hami Bolna suru gareko din 💕 (MMDD)";
+  }
+
+  const quizzes = [
+    {
+      q: "Where did we have those unforgettable panipuri dates where we laughed, talked, and took photos?",
+      options: ["Kaushaltar 🥟", "New Road", "Patan Durbar Square"],
+      answer: 0,
+      wrongMsg: "Ohooo birseu? Think about our panipuri spot! 😜"
+    },
+    {
+      q: "According to Sabitri Thulmami, where does the Acharya khandan ko ris sit?",
+      options: ["In the stomach", "Right on the tip of the nose (Naak ko tuppo ma) 😤", "Nowhere, I am always calm"],
+      answer: 1,
+      wrongMsg: "Haha nice try, you know how fast my temper flares! 😂"
+    },
+    {
+      q: "If I was right there in Nepal in your room right now, what would happen first?",
+      options: [
+        "We would quietly study together 📚",
+        "You'd hug me and cry, I'd pretend to be mad & tell you not to cry, then cuddle you until things get naughty 😏🔥",
+        "We would just go to sleep immediately"
+      ],
+      answer: 1,
+      wrongMsg: "As if I'd just study or sleep if I was in your room right now! 😏"
+    },
+    {
+      q: "After cuddling you in bed, how long would I keep you awake doing naughty things to you? 😈",
+      options: [
+        "Just 5 minutes",
+        "Hours and hours without letting you go 🔥😜",
+        "Not at all, I'm too innocent"
+      ],
+      answer: 1,
+      wrongMsg: "Innocent re?! You know me better than that, Sanu! 😝"
+    }
+  ];
+
+  let currentQ = 0;
+  function loadQuiz() {
+    const item = quizzes[currentQ];
+    document.getElementById("quizTitle").innerText = `Question ${currentQ + 1} of ${quizzes.length}`;
+    document.getElementById("quizQuestion").innerText = item.q;
+    document.getElementById("quizToast").innerText = "";
+    const optBox = document.getElementById("quizOptions");
+    optBox.innerHTML = "";
+    item.options.forEach((opt, idx) => {
+      const btn = document.createElement("div");
+      btn.className = "quiz-option";
+      btn.innerText = opt;
+      btn.onclick = () => {
+        if (idx === item.answer) {
+          currentQ++;
+          if (currentQ < quizzes.length) loadQuiz();
+          else goStage(3);
+        } else {
+          document.getElementById("quizToast").innerText = item.wrongMsg;
+        }
+      };
+      optBox.appendChild(btn);
+    });
+  }
+
+  function moveNo() {
+    const btn = document.getElementById("noBtn");
+    const x = Math.random() * 180 - 90;
+    const y = Math.random() * 80 - 20;
+    btn.style.transform = `translate(${x}px, ${y}px)`;
+  }
+
+  let holdTimer;
+  function startHold() {
+    document.getElementById("holdToast").innerText = "Syncing heartbeats... 💓";
+    holdTimer = setTimeout(() => {
+      goStage(6);
+      startLetter();
+    }, 1800);
+  }
+  function endHold() {
+    clearTimeout(holdTimer);
+    document.getElementById("holdToast").innerText = "Hold a little longer, Angel! 💕";
+  }
+
+  function goStage(n) {
+    document.querySelectorAll(".stage").forEach(el => el.classList.remove("active"));
+    document.getElementById("stage" + n).classList.add("active");
+  }
+
+  const letterText = `Dear Angel ❤️,
+
+Soo, dherai vayo hai letter nalekheko.. feri lekhna man lageko panina dherai vaisako time nai thiyena ta navanam aaja jagar chalyo so aaja lekhdai xu.. First of all thank you thank you sooo much for staying & being with me, malai jhelna ko lagi bisesh dhanyavaad.
+
+Ohoo, dherai paxi letter lekhexa kina lekhya jasto lagyo hola, tmlai dhanyavaad gyapan garna lekheko haai 🤣 hunxani hami ek arka sanga dherai kurako lagi thankful holam tara vandainam tara aaja ma saab vanna gairaheko xu yaad aako jati hai feri, sabai yaad ka hunxara haina 🤣
+
+Sooo, firstly long distance vayesi thaha vayo k hamile paila spend gareko time kati chai precious thiyo, I was meant to enjoy every bit of it tara ma aali pagal thiye aali hattarine manxe, sano kurama resaune manxe... (Yesko main context chai ma ekdin tmro room raat basne gari aako thiyeni aani hami mandir ma basya them bench ma tyo din bata bishesh aako hai, aani Jadibuti bata hiddai gako din bata pani) I wanna apologise, I'm so so so sorry la....
+
+Aani second ma sano kurama dherai resaye jastoni lagxa tyo bela ris valid thyo jasto lagthyo tara risko validity vanne chij chai hudaina hai hamile ta sakesamma ek arka lai bujne honi sano sano kurama resaune haina ni hai tarani ris kada mero resauthe ma (Santosh thulba ko budi Sabitri thulmami le vannu hunthyo k yo Acharya khandan ko ris chai naak ko tuppo mai hune hai vanera). Main yaad chai kun din ko aauxa vane ekdin ma tmro room ma aauda gharbeti le hoki kasle dekheko thiyo aani tmi aali risako type thiyeu malai jau vaneu tara ma jhan resaye risma gaye dherai resaye tesko lagini maafi magxu huss... So Sorry Sanu.
+
+Aani aaru ni thuprai holan tara aaile laichai yettinai yaad aayo baki aaru kura yaad aauxa gayo vane arko patrama avasya lekhne xu huss..
+
+Kaushaltar ma panipuri khadako bisesh yaad aauxa feri that's the moment I used to enjoy the most, that's something great man maja aauthyo khayo, guff layo, hasyo, photo khichyo.
+
+Aani aaunu aagi khasai time spend garna paiyena ma dherainai busy vayera last din pani ekdam hattar hattar vayo Dipesh dailai bahana banayera dhanna vetna chai aaye yeti mehenat gareko thiyeuni tmle.. I'm so so so thankful for that maan dherainai mehenat ra plan gareko thiyeu but samaye le aali sath diyena tesaile hatar hatar vayo.. so sorry la..
+
+Aani aaruta khasai kei yaad aairaxaina aaile lai aaja ma Nepal mai vaideko vaye sayed tmroma aauthe hola haai.. malai angalesi ekxin runtheu hola ma resauthe hola narou vanera samjhauthe hola and I would have cuddled you aani tmi nidautheu hola... Aaru ni dherai thok hunthyo hola 😜😝
+
+Last ma thank you for everything, dherai dherai nai thankful xu man batanai dhanyavaad gyapan garna chahe maile....
+Thank you for being with me.
+Thank you for being with me j sukai vaye pani.
+Special thanks for not giving up on me.
+
+I love you sooo soo much Sanu and I miss you soo sooo soo much 😚😚🤗🤗🫶❤️`;
+
+  function startLetter() {
+    const box = document.getElementById("letterContent");
+    box.innerText = letterText;
+  }
+</script>
+</body>
+</html>
