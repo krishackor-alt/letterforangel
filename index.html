@@ -517,4 +517,131 @@
     },
     {
       title: "♾️ Forever Yours, Angel ❤️",
-      text: `Last ma thank you for everything, dherai dherai nai thankful xu man batanai dhanyavaad gyapan garna chahe maile....\nThank you for being with me.\nThank you for being with me j sukai vaye pani.\nSpecial thanks for not giving up on me.\n\nNo matter the distance right now, you are always right here with me in every thought and every heartbeat.\n\
+      text: `Last ma thank you for everything, dherai dherai nai thankful xu man batanai dhanyavaad gyapan garna chahe maile....\nThank you for being with me.\nThank you for being with me j sukai vaye pani.\nSpecial thanks for not giving up on me.\n\nNo matter the distance right now, you are always right here with me in every thought and every heartbeat.\n\nI love you sooo soo much Sanu and I miss you soo sooo soo much 😚😚🤗🤗🫶❤️\n\nForever Yours ❤️`
+    }
+  ];
+
+  let currentPage = 0;
+  let isFullScrollMode = false;
+  let typingTimer = null;
+  let isTyping = false;
+
+  function openEnvelope() {
+    document.getElementById("envelopePrompt").style.display = "none";
+    document.getElementById("letterContainer").style.display = "block";
+    renderDots();
+    loadLetterPage(0);
+  }
+
+  function renderDots() {
+    const dotsWrap = document.getElementById("storyDots");
+    dotsWrap.innerHTML = "";
+    letterPages.forEach((_, idx) => {
+      const d = document.createElement("div");
+      d.className = "story-dot" + (idx <= currentPage ? " active" : "");
+      dotsWrap.appendChild(d);
+    });
+  }
+
+  function loadLetterPage(index) {
+    clearTimeout(typingTimer);
+    currentPage = index;
+    renderDots();
+
+    const box = document.getElementById("letterBox");
+    const contentEl = document.getElementById("letterContent");
+    const titleEl = document.getElementById("chapterTitle");
+    const badgeEl = document.getElementById("chapterBadge");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    box.scrollTop = 0; // Always start cleanly at the top of the card!
+    badgeEl.innerText = `Part ${currentPage + 1} of ${letterPages.length}`;
+    titleEl.style.display = "block";
+    titleEl.innerText = letterPages[currentPage].title;
+    contentEl.textContent = "";
+    contentEl.classList.add("typing-cursor");
+
+    prevBtn.style.display = currentPage === 0 ? "none" : "block";
+    if (currentPage === letterPages.length - 1) {
+      nextBtn.innerText = "📜 View Full Letter Together";
+    } else {
+      nextBtn.innerText = "Next Part ❤️ ➡";
+    }
+
+    isTyping = true;
+    typePageText(letterPages[currentPage].text, 0);
+  }
+
+  function typePageText(text, i) {
+    const contentEl = document.getElementById("letterContent");
+    if (i < text.length) {
+      contentEl.textContent += text.charAt(i);
+      typingTimer = setTimeout(() => typePageText(text, i + 1), 14);
+    } else {
+      isTyping = false;
+      contentEl.classList.remove("typing-cursor");
+    }
+  }
+
+  // If she taps the text box while it's typing, it reveals the rest of that page immediately
+  function finishCurrentPageInstantly() {
+    if (!isFullScrollMode && isTyping) {
+      clearTimeout(typingTimer);
+      isTyping = false;
+      const contentEl = document.getElementById("letterContent");
+      contentEl.textContent = letterPages[currentPage].text;
+      contentEl.classList.remove("typing-cursor");
+    }
+  }
+
+  function changePage(step) {
+    if (isTyping) {
+      finishCurrentPageInstantly();
+      return;
+    }
+    const nextIdx = currentPage + step;
+    if (nextIdx >= 0 && nextIdx < letterPages.length) {
+      loadLetterPage(nextIdx);
+    } else if (nextIdx >= letterPages.length) {
+      toggleReadMode();
+    }
+  }
+
+  function toggleReadMode() {
+    clearTimeout(typingTimer);
+    isTyping = false;
+    isFullScrollMode = !isFullScrollMode;
+
+    const box = document.getElementById("letterBox");
+    const contentEl = document.getElementById("letterContent");
+    const titleEl = document.getElementById("chapterTitle");
+    const badgeEl = document.getElementById("chapterBadge");
+    const toggleBtn = document.getElementById("toggleModeBtn");
+    const navBar = document.getElementById("letterNav");
+    const dotsWrap = document.getElementById("storyDots");
+
+    contentEl.classList.remove("typing-cursor");
+    box.scrollTop = 0;
+
+    if (isFullScrollMode) {
+      badgeEl.innerText = "💌 Full Letter";
+      toggleBtn.innerText = "📖 Story Mode";
+      titleEl.style.display = "none";
+      navBar.style.display = "none";
+      dotsWrap.style.display = "none";
+
+      // Combine all pages into one clean, freely-scrollable letter from the top
+      contentEl.textContent = letterPages.map(p => `${p.title}\n\n${p.text}`).join("\n\n────────────────────\n\n");
+    } else {
+      toggleBtn.innerText = "📜 Read Full Scroll";
+      navBar.style.display = "flex";
+      dotsWrap.style.display = "flex";
+      loadLetterPage(0);
+    }
+  }
+</script>
+</body>
+</html>
+
+
